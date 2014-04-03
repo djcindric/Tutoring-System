@@ -98,7 +98,7 @@ class Analyzer:
         
         # Formates description of the error
         desc = str(m)
-        print(desc)
+        
         # gets line number of error if there is one
         index = desc.find('line')
         if index > 0:
