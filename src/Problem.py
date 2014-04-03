@@ -37,6 +37,25 @@ class Problem:
          
         # contains the problem's output
         self.output = problem[9]
+        
+        # gets optimal solution and hints for problem
+        c.execute('select * from Solution where problem_id=?', self.problem_id)
+        
+        # contains all data for solution
+        solution = c.fetchall()
+        
+        # contains optimal solution
+        self.optimal_solution = []
+            
+        # contains hints foroptimal solution
+        self.hints = []
+        
+        i = 0
+        for row in solution:
+            self.optimal_solution.append(row[1])
+        
+            self.hints.append(row[2])
+            i += 1
 
     # prints all problems - for testing purposes
     def print_problems(self):
