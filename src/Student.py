@@ -66,10 +66,14 @@ class Student:
 
     # Gets current problem that the student needs to work (used problem_id)
     def get_current_problem(self):
-        session = (self.session,)
-            
+        c = self.conn.cursor()
+        session = (self.session - 1,)
+        
         c.execute('select current_problem from ' + self. student + ''' 
             where session = ?''', session)
+
+        problem = c.fetchone()
+        return problem[0]
 
     def insert_test_data(self):
         c = self.conn.cursor()
@@ -288,7 +292,7 @@ class Student:
         self.conn.commit()
 
 def run():
-    student = Student('test')
+    student = Student('Matt')
     #student.insert_test_data()
     student.create_new_session()
     student.print_student_information() 
