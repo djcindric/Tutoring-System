@@ -7,12 +7,8 @@ class Analyzer:
 
     # executes the student code and captures the output
     def execute_code(self, students_code):
-        # Reads in the game's defintions used by the student
-        definitions = open('Student_Definitions.py', 'r')
-        definitions = definitions.read()
-
-        # Concatenates the defintions and students code together
-        self.code = definitions + students_code
+        # Code is the  students code
+        self.code = students_code
 
         # students_output is the captured output from the students code
         self.students_output = io.StringIO()
@@ -102,6 +98,7 @@ class Analyzer:
         
         # Formates description of the error
         desc = str(m)
+        print(desc)
         # gets line number of error if there is one
         index = desc.find('line')
         if index > 0:
@@ -120,10 +117,7 @@ class Analyzer:
 # Stub for testing - run test to test it
 def test():
     print('Problem - Write a piece of code that prints the numbers 0 - 4\n')
-    students_code = '''x = 0
-while(x <= 5):
-    attack()
-    x = x + 1'''
+    students_code = "print('Matt)"
     print('Student\'s Code:')
     print(students_code)
     print()
@@ -134,8 +128,8 @@ while(x <= 5):
 4
 '''
     
-    optimal_solution = 'attack()', 'while'
-    hints = 'an attack() statement', 'a for loop'
+    optimal_solution =  ['print']
+    hints =  ['a for loop']
     analyzer = Analyzer()
     result = analyzer.analyze_code(students_code, correct_output, optimal_solution, hints)
     output = analyzer.students_output.getvalue()
@@ -148,3 +142,4 @@ while(x <= 5):
 '''
     print(analyzer.result)
 
+#test()
