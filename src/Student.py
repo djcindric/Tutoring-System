@@ -18,7 +18,7 @@ class Student:
             attempt_count integer, avg_attempt_count real, error_count integer,
             avg_error_count real, not_optimal_soln_count integer,
             avg_not_optimal_soln_count real, avg_item_time real,
-            total_minutes real)'''
+            total_minutes real, current_problem integer)'''
         
         # Create table
         c.execute(sql) 
@@ -50,11 +50,12 @@ class Student:
     def create_new_session(self):
         c = self.conn.cursor()
         
-        data = (self.session, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        data = (self.session, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1)
+
 
         # Insert a row of data
         sql = 'insert into '  + self.student + ''' 
-        values (?,?,?,?,?,?,?,?,?,?,?,?,?)'''
+        values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)'''
         c.execute(sql, data)
         
         # Save (commit) the changes
@@ -62,7 +63,14 @@ class Student:
 
         # We can also close the cursor if we are done with it
         c.close()
-    
+
+    # Gets current problem that the student needs to work (used problem_id)
+    def get_current_problem(self):
+        session = (self.session,)
+            
+        c.execute('select current_problem from ' + self. student + ''' 
+            where session = ?''', session)
+
     def insert_test_data(self):
         c = self.conn.cursor()
         
@@ -262,6 +270,15 @@ class Student:
         
         c.execute('update  ' + self.student  + ''' set 
             total_minutes = total_minutes + ? where session=?''', data)
+    
+    # Updates the current problem that the student is working (used problem_id)
+    # Needs to be called at end of each session
+    def update_current_problem(self, current_problem):
+        c = self.conn.cursor()
+        data = (current_problem, self.session,)
+            
+        c.execute('update ' + self. student + ''' set current_problem=? 
+            where session = ?''', data)
         
     # Will write the data to the database.
     # For performance reasons only do it at the end of each session. 
@@ -287,6 +304,7 @@ def run():
     student.update_avg_not_optimal_soln_count(2)
     student.update_avg_item_time(200)
     student.update_total_minutes_count(20)
+    student.update_current_problem(4)
 
     student.print_student_information() 
     student.update_percent_correct(.8)
@@ -303,5 +321,6 @@ def run():
     student.update_total_minutes_count(30)
     student.print_student_information() 
     student.write_data_to_DB()
+    student.drop_student_table()
 
-run()    
+#run()    
